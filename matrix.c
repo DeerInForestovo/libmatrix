@@ -24,7 +24,7 @@ inline struct matrix *createMatrix(int r, int c) {
     }
 }
 
-inline void clear(struct matrix *const mat) {
+inline void clearMatrix(struct matrix *const mat) {
     if(mat != NULL) memset(mat->arr, 0, sizeof(float) * mat->row * mat->column);
 }
 
