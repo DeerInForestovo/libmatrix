@@ -26,6 +26,12 @@ struct matrix {
 inline struct matrix *createMatrix(int r, int c);
 
 /**
+ * @brief Clear a matrix.
+ * @param mat Pointer to the matrix.
+*/
+inline void clearMatrix(struct matrix *const mat);
+
+/**
  * @brief Create a new matrix whose elements are all zero.
  * @param r The number of rows of the matrix.
  * @param c The number of columns of the matrix.
@@ -47,7 +53,7 @@ inline struct matrix *createIdenticalMatrix(int r);
  * @return 1 if there's an error, 0 otherwise.
  * @remark Do not free the matrix yourself, because there are some pointers inside.
 */
-inline int deleteMatrix(struct matrix *mat);
+inline int deleteMatrix(struct matrix *const mat);
 
 /**
  * @brief Get an element from a matrix.
@@ -65,15 +71,16 @@ inline float getMatrixElement(const struct matrix * mat, int r, int c);
  * @param c Targeted column.
  * @return 1 if there's an error, 0 otherwise.
 */
-inline int setMatrixElement(struct matrix * mat, int r, int c, float val);
+inline int setMatrixElement(struct matrix *const mat, int r, int c, float val);
 
 /**
  * @brief Copy all the data from the original matrix to the targeted matrix.
  * @param targetedMat Pointer to the targeted matrix.
  * @param originalMat Pointer to the original matrix.
- * @remark All data in targeted matrix will be eliminated.
+ * @return 1 if there's an error, 0 otherwise.
+ * @remark All data in the targeted matrix will be eliminated.
 */
-inline void copyMatrix(struct matrix *targetedMat, const struct matrix *originalMat);
+inline int copyMatrix(struct matrix *const targetedMat, const struct matrix *originalMat);
 
 /**
  * @brief Add two matrices.
@@ -92,25 +99,25 @@ inline struct matrix *addMatrix(const struct matrix *mat1, const struct matrix *
 inline struct matrix *subtractMatrix(const struct matrix *mat1, const struct matrix *mat2);
 
 /**
- * @brief Add a scalar to all elements in mat1.
- * @param mat1 Targeted matrix.
+ * @brief Add a scalar to all elements in a matrix.
+ * @param mat Pointer to the matrix.
  * @param val The scalar.
 */
-inline void addScalar(struct matrix *mat1, float val);
+inline void addScalar(struct matrix *const mat, float val);
 
 /**
- * @brief Subtract a scalar from all elements in mat1.
- * @param mat1 Targeted matrix.
+ * @brief Subtract a scalar from all elements in a matrix.
+ * @param mat Pointer to the matrix.
  * @param val The scalar.
 */
-inline void subtractScalar(struct matrix *mat1, float val);
+inline void subtractScalar(struct matrix *const mat1, float val);
 
 /**
- * @brief Multiply all elements in mat1 with a scalar.
- * @param mat1 Targeted matrix.
+ * @brief Multiply all elements in a matrix with a scalar.
+ * @param mat Pointer to the matrix.
  * @param val The scalar.
 */
-inline void multiplyScalar(struct matrix *mat1, float val);
+inline void multiplyScalar(struct matrix *const mat, float val);
 
 /**
  * @brief Multiply two matrices.
