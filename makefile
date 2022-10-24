@@ -7,6 +7,6 @@ test:
 	gcc -o test -L. test.c -lmatrix
 	./test
 
-clean:
+clear:
 	rm libmatrix.so
 	rm test
