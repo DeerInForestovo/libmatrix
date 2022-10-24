@@ -42,7 +42,7 @@ int main() {
     for(i = 0; i < 3; ++i)
         for(j = 0; j < 3; ++j)
             setMatrixElement(matA, i + 1, j + 1, A[i][j]);
-    struct matrix *matB = createMatrix(3, 3);
+    struct matrix *matB = createMatrix(3, 4);
     for(i = 0; i < 3; ++i)
         for(j = 0; j < 4; ++j)
             setMatrixElement(matB, i + 1, j + 1, B[i][j]);
@@ -74,7 +74,7 @@ int main() {
     struct matrix *matG = multiplyMatrix(matA, matB);
     printf("matrix G = A * B is:\n");
     printMatrix(matG);
-    struct matrix *matH;
+    struct matrix *matH = createMatrix(1, 1);
     copyMatrix(matH, matG);
     printf("matrix H = G is:\n");
     printMatrix(matH);

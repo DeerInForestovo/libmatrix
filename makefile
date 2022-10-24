@@ -1,9 +1,8 @@
 build:
 	gcc -shared -fPIC -o libmatrix.so matrix.c
-	export LD_LIBRARY_PATH=.:$$LD_LIBRARY_PATH
-	echo $$LD_LIBRARY_PATH
 
 test:
+	export LD_LIBRARY_PATH=.:$$LD_LIBRARY_PATH
 	gcc -o test -L. test.c -lmatrix
 	./test
 

@@ -65,9 +65,9 @@ inline int setMatrixElement(struct matrix *const mat, int r, int c, float val) {
 }
 
 inline int copyMatrix(struct matrix *const targetedMat, const struct matrix *originalMat) {
-    if(originalMat == NULL) return 1;
+    if(originalMat == NULL || targetedMat == NULL) return 1;
         else {
-            if(targetedMat->arr == NULL) return 1;
+            if(originalMat->arr == NULL) return 1;
             targetedMat->row = originalMat->row;
             targetedMat->column = originalMat->column;
             /**
@@ -76,8 +76,8 @@ inline int copyMatrix(struct matrix *const targetedMat, const struct matrix *ori
              * targetedMat will not change outside the function, you must keep the
              * pointer targetedMat unmodified.
             */
-            free(targetedMat->arr);
-            targetedMat->arr = malloc(sizeof(float) * targetedMat->row * targetedMat->column);
+            if(targetedMat->arr != NULL) free(targetedMat->arr);
+            targetedMat->arr = (float *)malloc(sizeof(float) * targetedMat->row * targetedMat->column);
             memcpy(targetedMat->arr, originalMat->arr, sizeof(float) * targetedMat->row * targetedMat->column);
             return 0;
         }
@@ -118,7 +118,7 @@ inline void subtractScalar(struct matrix *const mat, float val) {
 inline void multiplyScalar(struct matrix *const mat, float val) {
     if(mat != NULL) {
         int i, _i = mat->row * mat->column;
-        for(i = 0; i < _i; ++i) mat->arr[i] += val;
+        for(i = 0; i < _i; ++i) mat->arr[i] *= val;
     }
 }
 
