@@ -1,6 +1,15 @@
-#include "matrix.h"
-#include <stdio.h>
+/**
+ * @file
+ * @brief Functions in matrix.h is implement here.
+ * @author DeerInForest[https://github.com/sustechkl]
+*/
 
-void hello_world() {
-    printf("hello world!\n");
-}
+#include "matrix.h"
+
+#include <string.h>
+
+#ifdef _MATRIX_LIBRARY
+
+
+
+#endif
