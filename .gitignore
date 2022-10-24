@@ -1,5 +1,4 @@
 libmatrix.so
-
+matrix.o
 test
-
 .vscode/*
