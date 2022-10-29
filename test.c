@@ -90,11 +90,11 @@ int main() {
     printMatrix(matH);
     printf("Is matA exists? %d\n", __checkMatrix(matA));
     deleteMatrix(matA);
-    printf("/* delete matrix A */\n");
+    printf("delete matrix A\n");
     printf("Is matA exists? %d\n", __checkMatrix(matA));
     printf("Is matB exists? %d\n", __checkMatrix(matB));
     deleteAllMatrices();
-    printf("/* delete all matrices */\n");
+    printf("delete all matrices\n");
     printf("Is matB exists? %d\n", __checkMatrix(matB));
     return 0;
 }
