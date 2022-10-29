@@ -3,8 +3,10 @@
  * @brief A library for matrix operations in C.
  * @author DeerInForest[https://github.com/sustechkl]
  * 
- *  This is a library for matrix operations in C.
- *  I don't claim it to be perfectly safe and efficient, so do not use it in production.
+ * This is a library for matrix operations in C.
+ * I DO NOT claim it to be perfectly safe and efficient, so do not use it in production.
+ * However, it is expected to be safe if you always use the functions below instead of
+ * access a variable yourself.
 */
 
 #ifndef _MATRIX_LIBRARY
@@ -16,12 +18,33 @@ struct matrix {
     float *__arr;
 };
 
+/**
+ * @brief Check is a matrix exists now.
+ * @param mat Pointer to the matrix.
+ * @return isMatrixExists.
+ * @remark Only needed by the author.
+*/
+inline int __checkMatrix(const struct matrix * mat);
+
+/**
+ * @brief Add a matrix.
+ * @param mat Pointer to the matrix.
+ * @remark Only needed by the author.
+*/
+inline void __addMatrixNode(const struct matrix *mat);
+
+/**
+ * @brief Remove a matrix.
+ * @param mat Pointer to the matrix.
+ * @remark Only needed by the author.
+*/
+inline void __removeMatrixNode(const struct matrix *mat);
 
 /**
  * @brief Create a new matrix.
  * @param r The number of rows of the matrix.
  * @param c The number of columns of the matrix.
- * @return Null if failed to create, pointer to the new matrix.
+ * @return Null if failed to create, pointer to the new matrix otherwise.
 */
 inline struct matrix *createMatrix(int r, int c);
 
@@ -35,7 +58,7 @@ inline void clearMatrix(struct matrix *const mat);
  * @brief Create a new matrix whose elements are all zero.
  * @param r The number of rows of the matrix.
  * @param c The number of columns of the matrix.
- * @return Null if failed to create, pointer to the new matrix.
+ * @return Null if failed to create, pointer to the new matrix otherwise.
  * @remark Call create and clear.
 */
 inline struct matrix *createZeroMatrix(int r, int c);
@@ -43,7 +66,7 @@ inline struct matrix *createZeroMatrix(int r, int c);
 /**
  * @brief Create a new identical matrix.
  * @param r The number of rows and also columns of the matrix.
- * @return Null if failed to create, pointer to the new matrix.
+ * @return Null if failed to create, pointer to the new matrix otherwise.
 */
 inline struct matrix *createIdenticalMatrix(int r);
 
@@ -57,7 +80,7 @@ inline int deleteMatrix(struct matrix *const mat);
 
 /**
  * @brief Get an element from a matrix.
- * @param mat The targeted matrix.
+ * @param mat Pointer to the matrix.
  * @param r Targeted row.
  * @param c Targeted column.
  * @return The element at targeted position, 0 if do not exist.
@@ -65,8 +88,22 @@ inline int deleteMatrix(struct matrix *const mat);
 inline float getMatrixElement(const struct matrix * mat, int r, int c);
 
 /**
+ * @brief Get the number of rows of a matrix.
+ * @param mat Pointer to the matrix.
+ * @return The number of rows of a matrix.
+*/
+inline int getMatrixRowNumber(const struct matrix * mat);
+
+/**
+ * @brief Get the number of columns of a matrix.
+ * @param mat Pointer to the matrix.
+ * @return The number of columns of a matrix.
+*/
+inline int getMatrixColumnNumber(const struct matrix * mat);
+
+/**
  * @brief Set an element in a matrix.
- * @param mat The targeted matrix.
+ * @param mat Pointer to the matrix.
  * @param r Targeted row.
  * @param c Targeted column.
  * @return 1 if there's an error, 0 otherwise.
@@ -81,22 +118,6 @@ inline int setMatrixElement(struct matrix *const mat, int r, int c, float val);
  * @remark All data in the targeted matrix will be eliminated.
 */
 inline int copyMatrix(struct matrix *const targetedMat, const struct matrix *originalMat);
-
-/**
- * @brief Add two matrices.
- * @param mat1 Pointer to one matrix.
- * @param mat2 Pointer to the other one.
- * @return NULL if r or c of mat1 and mat2 are different, the pointer to the result otherwise.
-*/
-inline struct matrix *addMatrix(const struct matrix *mat1, const struct matrix *mat2);
-
-/**
- * @brief Subtract two matrices.
- * @param mat1 Pointer to one matrix.
- * @param mat2 Pointer to another.
- * @return NULL if r or c of mat1 and mat2 are different, the pointer to the result otherwise.
-*/
-inline struct matrix *subtractMatrix(const struct matrix *mat1, const struct matrix *mat2);
 
 /**
  * @brief Add a scalar to all elements in a matrix.
@@ -120,44 +141,42 @@ inline void subtractScalar(struct matrix *const mat1, float val);
 inline void multiplyScalar(struct matrix *const mat, float val);
 
 /**
- * @brief Multiply two matrices.
+ * @brief Add two matrices, do mat1 = mat1 + mat2.
  * @param mat1 Pointer to one matrix.
  * @param mat2 Pointer to another.
- * @return NULL if mat1->c != mat2->r, pointer to the result otherwise.
+ * @remark If r or c of mat1 and mat2 are different, nothing will happened.
 */
-inline struct matrix *multiplyMatrix(const struct matrix *mat1, const struct matrix *mat2);
+inline void addMatrix(const struct matrix *mat1, const struct matrix *mat2);
+
+/**
+ * @brief Subtract two matrices, do mat1 = mat1 - mat2.
+ * @param mat1 Pointer to one matrix.
+ * @param mat2 Pointer to another.
+ * @remark If r or c of mat1 and mat2 are different, nothing will happened.
+*/
+inline void subtractMatrix(const struct matrix *mat1, const struct matrix *mat2);
+
+/**
+ * @brief Multiply two matrices, do mat1 = mat1 * mat2.
+ * @param mat1 Pointer to one matrix.
+ * @param mat2 Pointer to another.
+ * @remark If c of mat1 and r of mat2 are different, nothing will happened.
+*/
+inline void multiplyMatrix(const struct matrix *mat1, const struct matrix *mat2);
 
 /**
  * @brief Find the minimal element in a matrix.
- * @param mat Pointer to the targeted matrix.
+ * @param mat Pointer to the matrix.
  * @return The minimal value.
 */
 inline float findMinimal(const struct matrix *mat);
 
 /**
  * @brief Find the maximal element in a matrix.
- * @param mat Pointer to the targeted matrix.
+ * @param mat Pointer to the matrix.
  * @return The maximal value.
 */
 inline float findMaximal(const struct matrix *mat);
-
-// Additional functions
-
-/**
- * @brief Calculate the rank of the matrix.
- * @param mat Pointer to the matrix.
- * @return The rank of the matrix.
- * @remark Number between -1e-7 and 1e-7 will be consider to be 0, so it can be wrong.
-*/
-inline int rank(const struct matrix *mat);
-
-/**
- * @brief Calculate the determinant of the matrix.
- * @param mat Pointer to the matrix.
- * @return The determinant of the matrix.
- * @remark The result can be wrong when the number is too big. Use it for small matrices only.
-*/
-inline float determinant(const struct matrix *mat);
 
 
 #endif /*_MATRIX_LIBRARY*/
