@@ -15,7 +15,52 @@
 
 #ifdef _MATRIX_LIBRARY
 
+#define _node __matrixLinkedListNode
+#define _head __matrixLinkedListHead
 
+struct _node {
+    struct _node *next;
+    const struct matrix *val;
+};
+
+struct _node *_head = NULL;
+
+inline int __checkMatrix(const struct matrix *mat) {
+    struct _node *now = _head;
+    while(now != NULL) {
+        if(now->val == mat) return 1;
+        now = now->next;
+    }
+    return 0;
+}
+
+inline void __addMatrixNode(const struct matrix *mat) {
+    struct _node *node = (struct _node *)malloc(sizeof(struct _node));
+    node->next = _head;
+    node->val = mat;
+    _head = node;
+}
+
+inline void __removeMatrixNode(const struct matrix *mat) {
+    if(_head != NULL) {
+        if(_head->val == mat) {
+            _head = _head->next;
+            free(_head);
+            return;
+        }
+    }
+    struct _node *now = _head;
+    while(now != NULL) {
+        if(now->next != NULL) {
+            if(now->next->val == mat) {
+                free(now->next);
+                now->next = now->next->next;
+                break;
+            }
+            now = now->next;
+        } else break;
+    }
+}
 
 inline struct matrix *createMatrix(int r, int c) {
     struct matrix *mat = (struct matrix *)malloc(sizeof(struct matrix));
@@ -155,5 +200,7 @@ inline float findMaximal(const struct matrix *mat) {
     return _max;
 }
 
+#undef _node
+#undef _head
 
 #endif
