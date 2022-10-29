@@ -14,7 +14,7 @@
 4. makefile
 5. report.pdf
 
-项目位于：https://github.com/sustechkl/libmatrix（10月31日零点后设置为 public ）
+项目位于：https://github.com/sustechkl/libmatrix （10月31日零点后设置为 public ）
 
 ### 接口解释：
 
@@ -173,11 +173,8 @@ inline void __removeMatrixNode(const struct matrix *mat);
 
 ### 测试
 
-可以在本地编译运行 test.c ，里面实现了所有接口的测试。
+可以在本地编译运行 test.c ，里面实现了所有接口的测试。结果如下：
 
-结果如下：
-
-```
 matrix A is:
 1.00 2.00 3.00 
 4.00 5.00 6.00 
@@ -235,12 +232,11 @@ matrix H = 0 is:
 0.00 0.00 0.00 0.00 
 0.00 0.00 0.00 0.00 
 Is matA exists? 1
-/* delete matrix A */
+delete matrix A
 Is matA exists? 0
 Is matB exists? 1
-/* delete all matrices */
+delete all matrices
 Is matB exists? 0
-```
 
 ### 困难与解决方案
 
