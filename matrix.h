@@ -31,7 +31,7 @@ inline int __checkMatrix(const struct matrix *mat);
  * @param mat Pointer to the matrix.
  * @remark Only needed by the author.
 */
-inline void __addMatrixNode(const struct matrix *mat);
+inline void __addMatrixNode(struct matrix *mat);
 
 /**
  * @brief Remove a matrix.
@@ -79,6 +79,11 @@ inline struct matrix *createIdenticalMatrix(int r);
 inline int deleteMatrix(struct matrix *const mat);
 
 /**
+ * @brief Delete all matrices.
+*/
+inline void deleteAllMatrices();
+
+/**
  * @brief Get an element from a matrix.
  * @param mat Pointer to the matrix.
  * @param r Targeted row.
@@ -123,46 +128,52 @@ inline int copyMatrix(struct matrix *const targetedMat, const struct matrix *ori
  * @brief Add a scalar to all elements in a matrix.
  * @param mat Pointer to the matrix.
  * @param val The scalar.
+ * @return 1 if there's an error, 0 otherwise.
 */
-inline void addScalar(struct matrix *const mat, float val);
+inline int addScalar(struct matrix *const mat, float val);
 
 /**
  * @brief Subtract a scalar from all elements in a matrix.
  * @param mat Pointer to the matrix.
  * @param val The scalar.
+ * @return 1 if there's an error, 0 otherwise.
 */
-inline void subtractScalar(struct matrix *const mat1, float val);
+inline int subtractScalar(struct matrix *const mat1, float val);
 
 /**
  * @brief Multiply all elements in a matrix with a scalar.
  * @param mat Pointer to the matrix.
  * @param val The scalar.
+ * @return 1 if there's an error, 0 otherwise.
 */
-inline void multiplyScalar(struct matrix *const mat, float val);
+inline int multiplyScalar(struct matrix *const mat, float val);
 
 /**
  * @brief Add two matrices, do mat1 = mat1 + mat2.
  * @param mat1 Pointer to one matrix.
  * @param mat2 Pointer to another.
+ * @return 1 if there's an error, 0 otherwise.
  * @remark If r or c of mat1 and mat2 are different, nothing will happened.
 */
-inline void addMatrix(struct matrix const *mat1, const struct matrix *mat2);
+inline int addMatrix(struct matrix *const mat1, const struct matrix *mat2);
 
 /**
  * @brief Subtract two matrices, do mat1 = mat1 - mat2.
  * @param mat1 Pointer to one matrix.
  * @param mat2 Pointer to another.
+ * @return 1 if there's an error, 0 otherwise.
  * @remark If r or c of mat1 and mat2 are different, nothing will happened.
 */
-inline void subtractMatrix(struct matrix const *mat1, const struct matrix *mat2);
+inline int subtractMatrix(struct matrix *const mat1, const struct matrix *mat2);
 
 /**
  * @brief Multiply two matrices, do mat1 = mat1 * mat2.
  * @param mat1 Pointer to one matrix.
  * @param mat2 Pointer to another.
+ * @return 1 if there's an error, 0 otherwise.
  * @remark If c of mat1 and r of mat2 are different, nothing will happened.
 */
-inline void multiplyMatrix(struct matrix const *mat1, const struct matrix *mat2);
+inline int multiplyMatrix(struct matrix *const mat1, const struct matrix *mat2);
 
 /**
  * @brief Find the minimal element in a matrix.

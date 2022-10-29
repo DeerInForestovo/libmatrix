@@ -3,7 +3,7 @@
  * @brief A tester for matrix.h.
  * @author DeerInForest[https://github.com/sustechkl]
  * 
- * The library can be used without the tester.
+ * The library can be used without this tester.
 */
 
 #include "matrix.h"
@@ -26,11 +26,11 @@ float B[3][4] = {
 
 inline void printMatrix(struct matrix *mat) {
     if(mat != NULL) {
-        int r = mat->row, c = mat->column;
+        int r = mat->__row, c = mat->__column;
         int i, j;
         for(i = 1; i <= r; ++i) {
             for(j = 1; j <= c; ++j)
-                printf("%f ", getMatrixElement(mat, i, j));
+                printf("%.2f ", getMatrixElement(mat, i, j));
             printf("\n");
         }
     } else printf("ERROR: matrix pointer is null.\n");
@@ -65,32 +65,30 @@ int main() {
     multiplyScalar(matA, 3);
     printf("matrix A = A * 3 is:\n");
     printMatrix(matA);
-    struct matrix *matE = addMatrix(matA, matC);
-    printf("matrix E = A + C is:\n");
-    printMatrix(matE);
-    struct matrix *matF = subtractMatrix(matA, matC);
-    printf("matrix F = A - C is:\n");
-    printMatrix(matF);
-    struct matrix *matG = multiplyMatrix(matA, matB);
-    printf("matrix G = A * B is:\n");
-    printMatrix(matG);
+    addMatrix(matA, matC);
+    printf("matrix A = A + C is:\n");
+    printMatrix(matA);
+    subtractMatrix(matA, matC);
+    printf("matrix A = A - C is:\n");
+    printMatrix(matA);
+    multiplyMatrix(matA, matB);
+    printf("matrix A = A * B is:\n");
+    printMatrix(matA);
     struct matrix *matH = createMatrix(1, 1);
-    copyMatrix(matH, matG);
-    printf("matrix H = G is:\n");
+    copyMatrix(matH, matA);
+    printf("matrix H = A is:\n");
     printMatrix(matH);
     printf("min in H is %f\n", findMinimal(matH));
     printf("max in H is %f\n", findMaximal(matH));
     clearMatrix(matH);
     printf("matrix H = 0 is:\n");
     printMatrix(matH);
+    printf("Is matA exists? %d\n", __checkMatrix(matA));
     deleteMatrix(matA);
-    deleteMatrix(matB);
-    deleteMatrix(matC);
-    deleteMatrix(matD);
-    deleteMatrix(matE);
-    deleteMatrix(matF);
-    deleteMatrix(matG);
-    deleteMatrix(matH);
+    printf("Is matA exists? %d\n", __checkMatrix(matA));
+    printf("Is matB exists? %d\n", __checkMatrix(matB));
+    deleteAllMatrices();
+    printf("Is matB exists? %d\n", __checkMatrix(matB));
     return 0;
 }
 

@@ -20,7 +20,7 @@
 
 struct _node {
     struct _node *next;
-    const struct matrix *val;
+    struct matrix *val;
 };
 
 struct _node *_head = NULL;
@@ -34,7 +34,8 @@ inline int __checkMatrix(const struct matrix *mat) {
     return 0;
 }
 
-inline void __addMatrixNode(const struct matrix *mat) {
+inline void __addMatrixNode(struct matrix *mat) {
+    if(__checkMatrix(mat)) return;
     struct _node *node = (struct _node *)malloc(sizeof(struct _node));
     node->next = _head;
     node->val = mat;
@@ -44,17 +45,19 @@ inline void __addMatrixNode(const struct matrix *mat) {
 inline void __removeMatrixNode(const struct matrix *mat) {
     if(_head != NULL) {
         if(_head->val == mat) {
-            _head = _head->next;
+            struct _node *theNext = _head->next;
             free(_head);
+            _head = theNext;
             return;
         }
-    }
+    } else return;
     struct _node *now = _head;
-    while(now != NULL) {
+    while(now != NULL) { /* while(true) */
         if(now->next != NULL) {
             if(now->next->val == mat) {
+                struct _node *theNext = now->next->next;
                 free(now->next);
-                now->next = now->next->next;
+                now->next = theNext;
                 break;
             }
             now = now->next;
@@ -71,12 +74,13 @@ inline struct matrix *createMatrix(int r, int c) {
     } else {
         mat->__row = r;
         mat->__column = c;
+        __addMatrixNode(mat);
         return mat;
     }
 }
 
 inline void clearMatrix(struct matrix *const mat) {
-    if(mat != NULL) memset(mat->__arr, 0, sizeof(float) * mat->__row * mat->__column);
+    if(__checkMatrix(mat)) memset(mat->__arr, 0, sizeof(float) * mat->__row * mat->__column);
 }
 
 inline struct matrix *createZeroMatrix(int r, int c) {
@@ -96,29 +100,38 @@ inline struct matrix *createIdenticalMatrix(int r) {
 }
 
 inline int deleteMatrix(struct matrix *const mat) {
-    if(mat == NULL) return 1;
+    if(!__checkMatrix(mat)) return 1;
     if(mat->__arr != NULL) free(mat->__arr);
+    __removeMatrixNode(mat);
     free(mat);
     return 0;
 }
 
+inline void deleteAllMatrices() {
+    while(_head != NULL) {
+        struct _node* theNext = _head->next;
+        deleteMatrix(_head->val);
+        _head = theNext;
+    }
+}
+
 inline float getMatrixElement(const struct matrix *mat, int r, int c) {
-    if(mat == NULL) return 0;
-    if(mat->__row < r || mat->__column < c) return 0;
+    if(!__checkMatrix(mat)) return 0;
+    if(mat->__row < r || mat->__column < c || r < 1 || c < 1) return 0;
     return mat->__arr[(r - 1) * mat->__column + (c - 1)];
 }
 
 inline int setMatrixElement(struct matrix *const mat, int r, int c, float val) {
-    if(mat == NULL) return 1;
-    if(mat->__row < r || mat->__column < c) return 1;
+    if(!__checkMatrix(mat)) return 1;
+    if(mat->__row < r || mat->__column < c || r < 1 || c < 1) return 1;
     mat->__arr[(r - 1) * mat->__column + (c - 1)] = val;
     return 0;
 }
 
 inline int copyMatrix(struct matrix *const targetedMat, const struct matrix *originalMat) {
-    if(originalMat == NULL || targetedMat == NULL) return 1;
+    if(!__checkMatrix(originalMat) || !__checkMatrix(targetedMat)) return 1;
         else {
-            if(originalMat->__arr == NULL) return 1;
+            if(originalMat->__arr == NULL) return 1; // Unexpected error
             targetedMat->__row = originalMat->__row;
             targetedMat->__column = originalMat->__column;
             /**
@@ -134,44 +147,52 @@ inline int copyMatrix(struct matrix *const targetedMat, const struct matrix *ori
         }
 }
 
-inline void addScalar(struct matrix *const mat, float val) {
-    if(mat != NULL) {
+inline int addScalar(struct matrix *const mat, float val) {
+    if(__checkMatrix(mat)) {
         int i, _i = mat->__row * mat->__column;
         for(i = 0; i < _i; ++i) mat->__arr[i] += val;
+        return 0;
     }
+    return 1;
 }
 
-inline void subtractScalar(struct matrix *const mat, float val) {
-    if(mat != NULL) {
+inline int subtractScalar(struct matrix *const mat, float val) {
+    if(__checkMatrix(mat)) {
         int i, _i = mat->__row * mat->__column;
         for(i = 0; i < _i; ++i) mat->__arr[i] -= val;
+        return 0;
     }
+    return 1;
 }
 
-inline void multiplyScalar(struct matrix *const mat, float val) {
+inline int multiplyScalar(struct matrix *const mat, float val) {
     if(mat != NULL) {
         int i, _i = mat->__row * mat->__column;
         for(i = 0; i < _i; ++i) mat->__arr[i] *= val;
+        return 0;
     }
+    return 1;
 }
 
-inline void addMatrix(struct matrix const *mat1, const struct matrix *mat2) {
-    if(!__checkMatrix(mat1) || !__checkMatrix(mat2)) return;
-    if(mat1->__column != mat2->__column || mat1->__row != mat2->__row) return;
+inline int addMatrix(struct matrix *const mat1, const struct matrix *mat2) {
+    if(!__checkMatrix(mat1) || !__checkMatrix(mat2)) return 1;
+    if(mat1->__column != mat2->__column || mat1->__row != mat2->__row) return 1;
     int i, _i = mat1->__row * mat1->__column;
     for(i = 0; i < _i; ++i) mat1->__arr[i] += mat2->__arr[i];
+    return 0;
 }
 
-inline void subtractMatrix(struct matrix const *mat1, const struct matrix *mat2) {
-    if(!__checkMatrix(mat1) || !__checkMatrix(mat2)) return;
-    if(mat1->__column != mat2->__column || mat1->__row != mat2->__row) return;
+inline int subtractMatrix(struct matrix *const mat1, const struct matrix *mat2) {
+    if(!__checkMatrix(mat1) || !__checkMatrix(mat2)) return 1;
+    if(mat1->__column != mat2->__column || mat1->__row != mat2->__row) return 1;
     int i, _i = mat1->__row * mat1->__column;
     for(i = 0; i < _i; ++i) mat1->__arr[i] -= mat2->__arr[i];
+    return 0;
 }
 
-inline void multiplyMatrix(struct matrix const *mat1, const struct matrix *mat2) {
-    if(!__checkMatrix(mat1) || !__checkMatrix(mat2)) return;
-    if(mat1->__column != mat2->__row) return;
+inline int multiplyMatrix(struct matrix *const mat1, const struct matrix *mat2) {
+    if(!__checkMatrix(mat1) || !__checkMatrix(mat2)) return 1;
+    if(mat1->__column != mat2->__row) return 1;
     int i, j, k;
     struct matrix *mat = createZeroMatrix(mat1->__row, mat2->__column);
     for(i = 1; i <= mat1->__row; ++i)
@@ -182,6 +203,8 @@ inline void multiplyMatrix(struct matrix const *mat1, const struct matrix *mat2)
             setMatrixElement(mat, i, j, sum);
         }
     copyMatrix(mat1, mat);
+    free(mat);
+    return 0;
 }
 
 inline float findMinimal(const struct matrix *mat) {
