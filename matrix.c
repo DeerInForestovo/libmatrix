@@ -1,7 +1,11 @@
 /**
  * @file
  * @brief Functions in matrix.h is implement here.
- * @author DeerInForest[https://github.com/sustechkl]
+ * @author DeerInForest[https://github.com/sustechkl]\
+ * 
+ * Functions in matrix.h is implement here.
+ * Instead of accessing the variables in a matrix, you are recommended
+ * to use these functions below.
 */
 
 #include "matrix.h"
@@ -10,6 +14,8 @@
 #include <stdlib.h> // malloc, free
 
 #ifdef _MATRIX_LIBRARY
+
+
 
 inline struct matrix *createMatrix(int r, int c) {
     struct matrix *mat = (struct matrix *)malloc(sizeof(struct matrix));
@@ -51,7 +57,7 @@ inline int deleteMatrix(struct matrix *const mat) {
     return 0;
 }
 
-inline float getMatrixElement(const struct matrix * mat, int r, int c) {
+inline float getMatrixElement(const struct matrix *mat, int r, int c) {
     if(mat == NULL) return 0;
     if(mat->__row < r || mat->__column < c) return 0;
     return mat->__arr[(r - 1) * mat->__column + (c - 1)];
@@ -83,24 +89,6 @@ inline int copyMatrix(struct matrix *const targetedMat, const struct matrix *ori
         }
 }
 
-inline struct matrix *addMatrix(const struct matrix *mat1, const struct matrix *mat2) {
-    if(mat1 == NULL || mat2 == NULL) return NULL;
-    if(mat1->__row != mat2->__row || mat1->__column != mat2->__column) return NULL;
-    struct matrix *mat = createMatrix(mat1->__row, mat1->__column);
-    int i, _i = mat1->__row * mat1->__column;
-    for(i = 0; i < _i; ++i) mat->__arr[i] = mat1->__arr[i] + mat2->__arr[i];
-    return mat;
-}
-
-inline struct matrix *subtractMatrix(const struct matrix *mat1, const struct matrix *mat2) {
-    if(mat1 == NULL || mat2 == NULL) return NULL;
-    if(mat1->__row != mat2->__row || mat1->__column != mat2->__column) return NULL;
-    struct matrix *mat = createMatrix(mat1->__row, mat1->__column);
-    int i, _i = mat1->__row * mat1->__column;
-    for(i = 0; i < _i; ++i) mat->__arr[i] = mat1->__arr[i] - mat2->__arr[i];
-    return mat;
-}
-
 inline void addScalar(struct matrix *const mat, float val) {
     if(mat != NULL) {
         int i, _i = mat->__row * mat->__column;
@@ -122,11 +110,25 @@ inline void multiplyScalar(struct matrix *const mat, float val) {
     }
 }
 
-inline struct matrix *multiplyMatrix(const struct matrix *mat1, const struct matrix *mat2) {
-    if(mat1 == NULL || mat2 == NULL) return NULL;
-    if(mat1->__column != mat2->__row) return NULL;
+inline void addMatrix(struct matrix const *mat1, const struct matrix *mat2) {
+    if(!__checkMatrix(mat1) || !__checkMatrix(mat2)) return;
+    if(mat1->__column != mat2->__column || mat1->__row != mat2->__row) return;
+    int i, _i = mat1->__row * mat1->__column;
+    for(i = 0; i < _i; ++i) mat1->__arr[i] += mat2->__arr[i];
+}
+
+inline void subtractMatrix(struct matrix const *mat1, const struct matrix *mat2) {
+    if(!__checkMatrix(mat1) || !__checkMatrix(mat2)) return;
+    if(mat1->__column != mat2->__column || mat1->__row != mat2->__row) return;
+    int i, _i = mat1->__row * mat1->__column;
+    for(i = 0; i < _i; ++i) mat1->__arr[i] -= mat2->__arr[i];
+}
+
+inline void multiplyMatrix(struct matrix const *mat1, const struct matrix *mat2) {
+    if(!__checkMatrix(mat1) || !__checkMatrix(mat2)) return;
+    if(mat1->__column != mat2->__row) return;
     int i, j, k;
-    struct matrix *mat = createMatrix(mat1->__row, mat2->__column);
+    struct matrix *mat = createZeroMatrix(mat1->__row, mat2->__column);
     for(i = 1; i <= mat1->__row; ++i)
         for(j = 1; j <= mat2->__column; ++j) {
             float sum = 0;
@@ -134,7 +136,7 @@ inline struct matrix *multiplyMatrix(const struct matrix *mat1, const struct mat
                 sum += getMatrixElement(mat1, i, k) * getMatrixElement(mat2, k, j);
             setMatrixElement(mat, i, j, sum);
         }
-    return mat;
+    copyMatrix(mat1, mat);
 }
 
 inline float findMinimal(const struct matrix *mat) {
@@ -152,24 +154,6 @@ inline float findMaximal(const struct matrix *mat) {
     for(i = 1; i < _i; ++i) if(mat->__arr[i] > _max) _max = mat->__arr[i];
     return _max;
 }
-
-// Additional functions
-
-/**
- * @brief Calculate the rank of the matrix.
- * @param mat Pointer to the matrix.
- * @return The rank of the matrix.
- * @remark Number between -1e-7 and 1e-7 will be consider to be 0, so it can be wrong.
-*/
-inline int rank(const struct matrix *mat);
-
-/**
- * @brief Calculate the determinant of the matrix.
- * @param mat Pointer to the matrix.
- * @return The determinant of the matrix.
- * @remark The result can be wrong when the number is too big. Use it for small matrices only.
-*/
-inline float determinant(const struct matrix *mat);
 
 
 #endif
