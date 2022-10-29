@@ -26,7 +26,7 @@ float B[3][4] = {
 
 inline void printMatrix(struct matrix *mat) {
     if(mat != NULL) {
-        int r = mat->__row, c = mat->__column;
+        int r = getMatrixRowNumber(mat), c = getMatrixColumnNumber(mat);
         int i, j;
         for(i = 1; i <= r; ++i) {
             for(j = 1; j <= c; ++j)
@@ -78,8 +78,10 @@ int main() {
     copyMatrix(matH, matA);
     printf("matrix H = A is:\n");
     printMatrix(matH);
-    printf("min in H is %f\n", findMinimal(matH));
-    printf("max in H is %f\n", findMaximal(matH));
+    printf("min in H is %.2f\n", findMinimal(matH));
+    printf("max in H is %.2f\n", findMaximal(matH));
+    printf("row number of H is %d\n", getMatrixRowNumber(matH));
+    printf("column number of H is %d\n", getMatrixColumnNumber(matH));
     clearMatrix(matH);
     printf("matrix H = 0 is:\n");
     printMatrix(matH);

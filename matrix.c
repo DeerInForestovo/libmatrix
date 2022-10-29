@@ -115,6 +115,16 @@ inline void deleteAllMatrices() {
     }
 }
 
+inline int getMatrixRowNumber(const struct matrix *mat) {
+    if(!__checkMatrix(mat)) return 0;
+    return mat->__row;
+}
+
+inline int getMatrixColumnNumber(const struct matrix *mat) {
+    if(!__checkMatrix(mat)) return 0;
+    return mat->__column;
+}
+
 inline float getMatrixElement(const struct matrix *mat, int r, int c) {
     if(!__checkMatrix(mat)) return 0;
     if(mat->__row < r || mat->__column < c || r < 1 || c < 1) return 0;
@@ -166,7 +176,7 @@ inline int subtractScalar(struct matrix *const mat, float val) {
 }
 
 inline int multiplyScalar(struct matrix *const mat, float val) {
-    if(mat != NULL) {
+    if(__checkMatrix(mat)) {
         int i, _i = mat->__row * mat->__column;
         for(i = 0; i < _i; ++i) mat->__arr[i] *= val;
         return 0;
@@ -208,7 +218,7 @@ inline int multiplyMatrix(struct matrix *const mat1, const struct matrix *mat2) 
 }
 
 inline float findMinimal(const struct matrix *mat) {
-    if(mat == NULL) return 0;
+    if(!__checkMatrix(mat)) return 0;
     float _min = mat->__arr[0];
     int i, _i = mat->__row * mat->__column;
     for(i = 1; i < _i; ++i) if(mat->__arr[i] < _min) _min = mat->__arr[i];
@@ -216,7 +226,7 @@ inline float findMinimal(const struct matrix *mat) {
 }
 
 inline float findMaximal(const struct matrix *mat) {
-    if(mat == NULL) return 0;
+    if(!__checkMatrix(mat)) return 0;
     float _max = mat->__arr[0];
     int i, _i = mat->__row * mat->__column;
     for(i = 1; i < _i; ++i) if(mat->__arr[i] > _max) _max = mat->__arr[i];

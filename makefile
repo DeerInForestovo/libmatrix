@@ -1,4 +1,4 @@
-test:
+run:
 	gcc -fPIC -c matrix.c -o matrix.o
 	gcc -shared matrix.o -o libmatrix.so
 	gcc -o test test.c -L. -lmatrix
