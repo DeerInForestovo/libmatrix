@@ -12,8 +12,8 @@
 
 // Matrix body
 struct matrix {
-    int row, column;
-    float *arr;
+    int __row, __column;
+    float *__arr;
 };
 
 
