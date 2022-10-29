@@ -125,6 +125,13 @@ inline int setMatrixElement(struct matrix *const mat, int r, int c, float val);
 inline int copyMatrix(struct matrix *const targetedMat, const struct matrix *originalMat);
 
 /**
+ * @brief Create a new matrix, who is a copy of an exists matrix.
+ * @param mat Pointer to the matrix.
+ * @return NULL if failed to create, pointer to the new matrix otherwise.
+*/
+inline struct matrix *createMatrixCopy(const struct matrix *mat);
+
+/**
  * @brief Add a scalar to all elements in a matrix.
  * @param mat Pointer to the matrix.
  * @param val The scalar.

@@ -78,6 +78,9 @@ int main() {
     copyMatrix(matH, matA);
     printf("matrix H = A is:\n");
     printMatrix(matH);
+    struct matrix *matG = createMatrixCopy(matH);
+    printf("matrix G = H is:\n");
+    printMatrix(matG);
     printf("min in H is %.2f\n", findMinimal(matH));
     printf("max in H is %.2f\n", findMaximal(matH));
     printf("row number of H is %d\n", getMatrixRowNumber(matH));

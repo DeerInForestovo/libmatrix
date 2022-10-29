@@ -157,6 +157,12 @@ inline int copyMatrix(struct matrix *const targetedMat, const struct matrix *ori
         }
 }
 
+inline struct matrix *createMatrixCopy(const struct matrix *mat) {
+    struct matrix *new = createMatrix(1, 1);
+    copyMatrix(new, mat);
+    return new;
+}
+
 inline int addScalar(struct matrix *const mat, float val) {
     if(__checkMatrix(mat)) {
         int i, _i = mat->__row * mat->__column;
