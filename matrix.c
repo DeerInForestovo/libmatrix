@@ -219,7 +219,7 @@ inline int multiplyMatrix(struct matrix *const mat1, const struct matrix *mat2) 
             setMatrixElement(mat, i, j, sum);
         }
     copyMatrix(mat1, mat);
-    free(mat);
+    deleteMatrix(mat);
     return 0;
 }
 
